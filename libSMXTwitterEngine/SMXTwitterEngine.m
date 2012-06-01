@@ -95,7 +95,12 @@
                     handler([NSDictionary dictionary], error);
                 });
             }];
-            [[[[UIApplication sharedApplication] keyWindow] rootViewController] presentModalViewController:tweetComposeViewController animated:YES]; 
+            UIViewController *baseViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+            NSAssert(baseViewController != nil, @"There's no root view controller!");
+            while ([baseViewController modalViewController]){
+                baseViewController = [baseViewController modalViewController];
+            }
+            [baseViewController presentModalViewController:tweetComposeViewController animated:YES]; 
         });
     } else {
         ACAccountStore *accountStore = [[ACAccountStore alloc] init];
